@@ -1,20 +1,23 @@
 from dataclasses import dataclass
 from typing import Sequence
-import numpy as np
+
 import cv2
+import numpy as np
+import numpy.typing as npt
 
 
 @dataclass
 class BirdsImage:
     """Input image with birds and their contours."""
+
     filename: str
-    image: np.ndarray | None = None
-    contours: Sequence[np.ndarray] | None = None
+    image: npt.NDArray | None = None
+    contours: Sequence[npt.NDArray] | None = None
     thresh: int = 127
     _is_fit: bool = False
 
     @property
-    def image_orig(self) -> np.ndarray:
+    def image_orig(self) -> npt.NDArray:
         """Original, not modified image."""
         return cv2.imread(self.filename)
 
@@ -35,11 +38,11 @@ class BirdsImage:
         self.contours, _ = cv2.findContours(threshold, 1, 2)
         self._is_fit = True
 
-    def annotate(self) -> np.ndarray:
+    def annotate(self) -> npt.NDArray:
         """Draw contours around identified birds."""
         if not self._is_fit:
             raise ValueError('run `.fit()` first')
-            
+
         image = self.image.copy()
 
         for cnt in self.contours:
@@ -47,8 +50,7 @@ class BirdsImage:
 
         return image
 
-    def side_by_side(self) -> np.ndarray:
+    def side_by_side(self) -> npt.NDArray:
         """Side by side comparison of the fitted image and the original one."""
         annotated = self.annotate()
         return np.hstack([annotated, self.image_orig])
-            
