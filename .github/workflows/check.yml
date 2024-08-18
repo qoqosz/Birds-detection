@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -19,14 +19,18 @@ jobs:
         python -m pip install -U pip
         python -m pip install .[dev]
     - name: Black
+      if: always()
       run: |
         black $(git ls-files '*.py')
     - name: Ruff
+      if: always()
       run: |
         ruff check $(git ls-files '*.py')
     - name: isort
+      if: always()
       run: |
         isort $(git ls-files '*.py')
     - name: MyPy
+      if: always()
       run: |
         mypy $(git ls-files '*.py')
