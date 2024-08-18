@@ -22,7 +22,7 @@ jobs:
         black $(git ls-files '*.py')
     - name: Ruff
       run: |
-        ruff $(git ls-files '*.py')
+        ruff check $(git ls-files '*.py')
     - name: isort
       run: |
         isort $(git ls-files '*.py')

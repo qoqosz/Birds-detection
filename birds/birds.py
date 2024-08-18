@@ -26,6 +26,7 @@ class BirdsImage:
         """Number of found birds in the image."""
         if not self._is_fit:
             raise ValueError('run `.fit()` first')
+        assert self.contours is not None
         return len(self.contours)
 
     def fit(self) -> None:
@@ -43,8 +44,10 @@ class BirdsImage:
         if not self._is_fit:
             raise ValueError('run `.fit()` first')
 
+        assert self.image is not None
         image = self.image.copy()
 
+        assert self.contours is not None
         for cnt in self.contours:
             cv2.drawContours(image, [cnt], 0, (0, 0, 255), 1)
 
