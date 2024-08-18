@@ -1,0 +1,31 @@
+name: Python Check
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install .[dev]
+    - name: Black
+      run: |
+        black $(git ls-files '*.py')
+    - name: Ruff
+      run: |
+        ruff $(git ls-files '*.py')
+    - name: isort
+      run: |
+        isort $(git ls-files '*.py')
+    - name: MyPy
+      run: |
+        mypy $(git ls-files '*.py')
